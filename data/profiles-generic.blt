@@ -1,0 +1,189 @@
+#BOLTS - Open Library of Technical Specifications
+#Copyright (c) Bernd Hahnebach <bernd@bimstatik.org>
+#
+#Permission is hereby granted, free of charge, to any person obtaining a copy
+#of this software and associated documentation files (the "Software"), to deal
+#in the Software without restriction, including without limitation the rights
+#to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+#copies of the Software, and to permit persons to whom the Software is
+#furnished to do so, subject to the following conditions:
+#
+#The above copyright notice and this permission notice shall be included in
+#all copies or substantial portions of the Software.
+#
+#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+#AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+#LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+#OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+#THE SOFTWARE.
+---
+id: profiles-generic
+name: Generic Profiles
+description: various generic profiles 
+author: Bernd Hahnebach <bernd@bimstatik.org>
+license: MIT <http://opensource.org/licenses/MIT>
+blt-version: 0.3
+classes:
+  - id: generic_circle
+    naming:
+      template: Circle D %g length %g
+      substitute: [d, l]
+    description: a generic circle
+    parameters:
+      free: [d, l]
+      defaults: {d: 20, l: 1000}
+      types:
+        d: Length (mm)
+        l: Length (mm)
+      description:
+        d: diameter
+        l: length
+    source: No source information used
+  - id: generic_rectangle
+    naming:
+      template: Rectangle h %g b %g length %g
+      substitute: [h, b, l]
+    description: a generic rectangle
+    parameters:
+      free: [h, b, l]
+      defaults: {h: 150, b: 80, l: 1000}
+      types:
+        h: Length (mm)
+        b: Length (mm)
+        l: Length (mm)
+      description:
+        h: height
+        b: flange width
+        l: beam length
+    source: No source information used
+  - id: generic_pipe
+    naming:
+      template: Pipe OD %g ID %g length %g
+      substitute: [od, id, l]
+    description: a generic pipe
+    parameters:
+      free: [od, id, l]
+      defaults: {od: 13, id: 10, l: 1000}
+      types:
+        id: Length (mm)
+        od: Length (mm)
+        l: Length (mm)
+      description:
+        id: inner diameter
+        od: outer diameter
+        l: length
+    source: No source information used
+  - id: generic_hollow_rectangle
+    naming:
+      template: "RRW%s-%s-%s, l=%s"
+      substitute: [h, b, t, l]
+    description: a generic hollow rectangle profile (RRW)
+    parameters:
+      free: [h, b, t, l]
+      defaults: {h: 100, b: 100, t: 6.3, l: 2500}
+      types:
+          h: Length (mm)
+          b: Length (mm)
+          t: Length (mm)
+          l: Length (mm)
+      description:
+          h: profile height
+          b: profile width
+          t: web thickness
+          l: profile length
+    source: No source information used
+  - id: generic_i-beam_pf
+    naming:
+      template: "I-Beam%s-%s-%s-%s-%s, l=%s"
+      substitute: [h, b, tw, tf, r, l]
+    description: a generic I-beam profile with parallel flanges
+    parameters:
+      free: [h, b, tw, tf, r, l]
+      defaults: {h: 200, b: 200, tw: 9, tf: 15, r: 18, l: 2500}
+      types:
+          h: Length (mm)
+          b: Length (mm)
+          tw: Length (mm)
+          tf: Length (mm)
+          r: Length (mm)
+          l: Length (mm)
+      description:
+          h: beam height
+          b: flange width
+          tw: web thickness
+          tf: flange thickness
+          r: fillet radius
+          l: beam length
+    source: No source information used
+  - id: generic_C-beam_pf
+    naming:
+      template: "C-Beam%s-%s-%s-%s-%s, l=%s"
+      substitute: [h, b, tw, tf, r, l]
+    description: a generic i-beam profile with parallel flanges
+    parameters:
+      free: [h, b, tw, tf, r, l]
+      defaults: {h: 200, b: 80, tw: 6, tf: 11, r: 13, l: 2500}
+      types:
+          h: Length (mm)
+          b: Length (mm)
+          tw: Length (mm)
+          tf: Length (mm)
+          r: Length (mm)
+          l: Length (mm)
+      description:
+          h: beam height
+          b: flange width
+          tw: web thickness
+          tf: flange thickness
+          r: fillet radius
+          l: beam length
+    source: No source information used
+  - id: generic_t-beam_pf
+    naming:
+      template: "T-Beam%s-%s-%s-%s-%s, l=%s"
+      substitute: [h, b, tw, tf, r, l]
+    description: a generic T-beam profile with parallel flange
+    parameters:
+      free: [h, b, tw, tf, r, l]
+      defaults: {h: 100, b: 200, tw: 9, tf: 15, r: 18, l: 2500}
+      types:
+          h: Length (mm)
+          b: Length (mm)
+          tw: Length (mm)
+          tf: Length (mm)
+          r: Length (mm)
+          l: Length (mm)
+      description:
+          h: beam height
+          b: flange width
+          tw: web thickness
+          tf: flange thickness
+          r: fillet radius
+          l: beam length
+    source: No source information used
+  - id: generic_l-beam_pf
+    naming:
+      template: "L-Beam%s-%s-%s-%s-%s, l=%s"
+      substitute: [h, b, tw, tf, r, l]
+    description: a generic L-beam profile with parallel flanges
+    parameters:
+      free: [h, b, tw, tf, r, l]
+      defaults: {h: 200, b: 80, tw: 6, tf: 11, r: 13, l: 2500}
+      types:
+          h: Length (mm)
+          b: Length (mm)
+          tw: Length (mm)
+          tf: Length (mm)
+          r: Length (mm)
+          l: Length (mm)
+      description:
+          h: beam height
+          b: flange width
+          tw: web thickness
+          tf: flange thickness
+          r: fillet radius
+          l: beam length
+    source: No source information used
+

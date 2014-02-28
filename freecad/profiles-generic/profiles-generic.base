@@ -1,0 +1,23 @@
+---
+- filename: profiles-generic.py
+  author: Bernd Hahnebach <bernd@bimstatik.org>
+  license: LGPL 2.1+ <http://www.gnu.org/licenses/lgpl-2.1>
+  type: function
+  functions:
+    - name: generic_circle
+      classids: [generic_circle]
+    - name: generic_rectangle
+      classids: [generic_rectangle]
+    - name: generic_hollow_rectangle
+      classids: [generic_hollow_rectangle]
+    - name: generic_pipe
+      classids: [generic_pipe]
+    - name: generic_ibeam_pf
+      classids: [generic_i-beam_pf]
+    - name: generic_cbeam_pf
+      classids: [generic_c-beam_pf]
+    - name: generic_tbeam_pf
+      classids: [generic_t-beam_pf]
+    - name: generic_lbeam_pf
+      classids: [generic_l-beam_pf]
+...
