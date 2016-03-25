@@ -1,0 +1,12 @@
+---
+- filename: hexscrews.py
+  type: module
+  author: [Johannes Reinhardt <jreinhardt@ist-dein-freund.de>, Bernd Hahnebach <bernd@bimstatik.org>]
+  license: LGPL 2.1+ <http://www.gnu.org/licenses/lgpl-2.1>
+  classids: [hexscrew1, hexscrew2]
+- filename: hexbolts.py
+  type: module
+  author: [Johannes Reinhardt <jreinhardt@ist-dein-freund.de>, Bernd Hahnebach <bernd@bimstatik.org>]
+  license: LGPL 2.1+ <http://www.gnu.org/licenses/lgpl-2.1>
+  classids: [hexbolt1, hexbolt2]
+...

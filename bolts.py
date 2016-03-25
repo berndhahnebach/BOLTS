@@ -20,6 +20,7 @@ from bolttools.blt import Repository
 from bolttools.freecad import FreeCADData
 from bolttools.openscad import OpenSCADData
 from bolttools.drawings import DrawingsData
+from bolttools.allplan import AllplanData
 #from bolttools.solidworks import SolidWorksData
 
 from backends.license import LICENSES_SHORT
@@ -40,6 +41,7 @@ def export(args):
 	dbs["openscad"] = OpenSCADData(repo)
 	dbs["freecad"] = FreeCADData(repo)
 	dbs["drawings"] = DrawingsData(repo)
+	dbs["allplan"] = AllplanData(repo)
 #	dbs["solidworks"] = SolidWorksData(repo)
 
 	license = LICENSES_SHORT[args.license]
@@ -64,6 +66,9 @@ def export(args):
 	elif args.target == "iges":
 		from backends.exchange import IGESBackend
 		IGESBackend(repo,dbs).write_output(out_path,"development")
+	elif args.target == "allplan":
+		from backends.allplan import AllplanBackend
+		AllplanBackend(repo,dbs).write_output(out_path,target_license=license,version="development")
 
 def test(args):
 	exec_dir = os.path.join(args.repo,"output",args.target)
@@ -291,7 +296,7 @@ subparsers = parser.add_subparsers()
 parser_export = subparsers.add_parser("export")
 parser_export.add_argument("target",
 	type=str,
-	choices=["openscad","freecad","html","iges"],
+	choices=["openscad","freecad","html","iges","allplan"],
 	help="the distribution to create")
 parser_export.add_argument("-l","--license",
 	type=str,
