@@ -15,7 +15,7 @@
 #License along with this library; if not, write to the Free Software
 #Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 ---
-id: profiles_hollow
+id: profile_hollow
 name: Hollow sections
 description: Hot finished structural hollow sections
 author: [Bernd Hahnebach <bernd@bimstatik.org>, Johannes Reinhardt <jreinhardt@ist-dein-freund.de>]
