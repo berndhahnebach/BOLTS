@@ -1,0 +1,13 @@
+---
+- filename: GeomWasherStd.py
+  author: Bernd Hahnebach <bernd@bimstatik.org>
+  license: LGPL 2.1+ <http://www.gnu.org/licenses/lgpl-2.1>
+  type: module
+  classids: [plainwasher1, plainwasher2, plainwasherforcheesehead, heavydutyplainwasher]
+- filename: GeomWasherChamfered.py
+  author: Bernd Hahnebach <bernd@bimstatik.org>
+  license: LGPL 2.1+ <http://www.gnu.org/licenses/lgpl-2.1>
+  type: module
+  classids: [plainwasherchamfered]
+...
+
