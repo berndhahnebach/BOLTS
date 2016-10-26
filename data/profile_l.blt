@@ -32,6 +32,8 @@ classes:
       standard: DINEN10056-1
       labeling: DINEN10056-1 %(type)s, l=%(l)s
       description: corner profile, metric european standard equal-sided LNP profile
+    source: http://www.bauforumstahl.de/Querschnittswerte
+    notes: http://en.wikipedia.org/wiki/Structural_steel
     parameters:
         free: [type,l]
         defaults: {type: "LNP20x3", l: 1000}
@@ -56,6 +58,4 @@ classes:
                 #type     [     a    t    r1    r2 ]
                 LNP20x3:  [    20,   3,  3.5, 1.75 ]
                 LNP25x3:  [    25,   3,  3.5, 1.75 ]
-    source: http://www.bauforumstahl.de/Querschnittswerte
-    notes: http://en.wikipedia.org/wiki/Structural_steel
 ...
