@@ -70,10 +70,16 @@ def check_allplan_version(build_ele, version):
 
 def create_element(build_ele, doc):
 
-    # get the input values and initialize the BOLTS params dictionary
-    params = {}
-    bolts_std_id = build_ele.Standard.value
+    # path for Geom module, need to be inside the def for some reason ... ?!
+    sys.path.append(dirname(__file__))
 
+    # initialize tze BOLTS repo
+    repo = BOLTSblt.Repository(rootpath)
+
+    # initialize the BOLTS params dictionary
+    params = {}
+
+    # get the input values and fill params with them
 '''
 
 
@@ -144,6 +150,8 @@ class AllplanBackend(Backend):
                 pyguiname = 'gui_' + base.filename
                 with open(join(out_module, pyguiname), "w") as pyguifile:
                     pyguifile.write(pyguitemplate_pre)
+                    pyguifile.write("    bolts_std_id = build_ele.Standard.value\n")
+                    pyguifile.write("\n")
                     for std, cl in self.dbs["allplan"].iterstandards(["standard", "class"], filter_base=base):
                         stdid = str(std.get_id())
                         if_line = "    if bolts_std_id == '" + stdid + "':"
@@ -153,14 +161,13 @@ class AllplanBackend(Backend):
                             pyguifile.write(pname_line + "\n")
                         pyguifile.write("\n")
                     pyguifile.write("\n")
-                    pyguifile.write("    # get the BOLTS geometry values\n")
-                    pyguifile.write("    repo = BOLTSblt.Repository(rootpath)\n")
+                    pyguifile.write("    # get the BOLTS geometry values and write them to params too\n")
                     pyguifile.write("    cl = repo.class_standards.get_src(repo.standards[bolts_std_id])\n")
                     pyguifile.write("    params = cl.parameters.collect(params)\n")
                     pyguifile.write("    print(params)\n")
                     pyguifile.write("\n")
                     pyguifile.write("    # build geometry\n")
-                    pyguifile.write("    sys.path.append(dirname(__file__))\n")
+                    # pyguifile.write("    sys.path.append(dirname(__file__))\n")
                     pyguifile.write("    import " + base_name + "\n")
                     pyguifile.write("    bolt_part = " + base_name + "." + base_name + "(params)\n")
                     pyguifile.write("\n")
@@ -242,3 +249,147 @@ class AllplanBackend(Backend):
                 f = open(xmlfile, "w")
                 f.write(prettyxml)
                 f.close
+
+
+        ##############################################################################
+        ##############################################################################
+        ##############################################################################
+        pyguiname = 'gui_BOLTS.py'
+        # try one big BOLTS pyp file
+
+        # GUI, pyp file
+        pyp = ElementTree(file=join(self.repo.path, "backends", "allplan", "pyptemplate.xml"))
+        # fill in script tag
+        script = pyp.getroot().findall("Script")[0]
+        #SubElement(script, "Name").text = "BIMStatik\\BOLTS\\" + "gui_GeomProfileI.py"  # PENDENT!!!
+        SubElement(script, "Name").text = "BIMStatik\\BOLTS\\" + pyguiname
+        SubElement(script, "Title").text = "BOLTS"
+        SubElement(script, "Version").text = "1.0"
+
+        element = pyp.getroot()
+        page = SubElement(element, "Page")
+        SubElement(page, "Name").text = "page1"
+        SubElement(page, "Text").text = "BOLTS"
+
+        # ComboBox with all collection ids
+        # collect the collections
+        print("\n\nTry to make one big BOLTS pyp")
+        coll_value_list = "Choose"
+        for coll, in self.repo.itercollections():
+            if not exists(join(self.repo.path, "allplan", coll.id, "%s.base" % coll.id)):
+                # print("Skip %s due to missing base file" % coll.id)
+                continue
+            else:
+                print("Include %s" % coll.id)
+            # print coll.id
+            coll_value_list += "|"
+            coll_value_list += str(coll.id)
+        print coll_value_list
+        param = SubElement(page, "Parameter")
+        SubElement(param, "Name").text = "CollectionID"
+        SubElement(param, "Text").text = "CollectionID PalleteText"
+        SubElement(param, "Value").text = "Choose"
+        SubElement(param, "ValueList").text = coll_value_list
+        SubElement(param, "ValueType").text = "StringComboBox"
+
+
+
+        for coll, in self.repo.itercollections():
+            if not exists(join(self.repo.path, "allplan", coll.id, "%s.base" % coll.id)):
+                # print("Skip %s due to missing base file" % coll.id)
+                continue
+            print(coll.id)
+            class_value_list = "Choose"
+            for base, classes in self.dbs["allplan"].iterbases(["base", "classes"], filter_collection=coll):
+                for cl in classes:
+                    print("  " + cl.id + " --> " + splitext(base.filename)[0])
+                    class_value_list += "|"
+                    class_value_list += cl.id
+                print class_value_list
+            param = SubElement(page, "Parameter")
+            SubElement(param, "Name").text = "ClassID_" + coll.id
+            SubElement(param, "Text").text = "Collection Classes"
+            SubElement(param, "Visible").text = "CollectionID == '" + coll.id + "'"
+            SubElement(param, "Value").text = "Choose"
+            SubElement(param, "ValueList").text = class_value_list
+            SubElement(param, "ValueType").text = "StringComboBox"
+
+
+            # now we need the keys and types and Length and other keays like in all pyp for each class
+            for base, classes in self.dbs["allplan"].iterbases(["base", "classes"], filter_collection=coll):
+                for cl in classes:
+                    for pname in cl.parameters.free:
+                        # print ("  %s" % pname)
+                        param = SubElement(page, "Parameter")
+                        SubElement(param, "Name").text = "PName_" + pname + "_" + cl.id
+                        SubElement(param, "Text").text = "%s (%s)" % (pname, cl.parameters.description[pname])
+                        SubElement(param, "Visible").text = "CollectionID == '" + coll.id + "' and ClassID_" + coll.id + " == '" + cl.id + "'"
+
+                        if cl.parameters.types[pname] == "Length (mm)":
+                            SubElement(param, "Value").text = str(cl.parameters.defaults[pname])
+                            SubElement(param, "ValueType").text = "Length"
+                        elif cl.parameters.types[pname] == "Number":
+                            SubElement(param, "Value").text = str(cl.parameters.defaults[pname])
+                            SubElement(param, "ValueType").text = "Double"
+                        elif cl.parameters.types[pname] == "Bool":
+                            SubElement(param, "Value").text = str(cl.parameters.defaults[pname])
+                            SubElement(param, "ValueType").text = "CheckBox"
+                        elif cl.parameters.types[pname] == "Table Index":
+                            SubElement(param, "Value").text = str(cl.parameters.defaults[pname])
+                            SubElement(param, "ValueList").text = "|".join(cl.parameters.choices[pname])
+                            SubElement(param, "ValueType").text = "StringComboBox"
+                        elif cl.parameters.types[pname] == "String":
+                            SubElement(param, "Value").text = str(cl.parameters.defaults[pname])
+                            SubElement(param, "ValueType").text = "String"
+                            pass
+                        elif cl.parameters.types[pname] == "Angle (deg)":
+                            SubElement(param, "Value").text = str(cl.parameters.defaults[pname])
+                    SubElement(param, "ValueType").text = "Angle"
+
+        # write the file and writ it again, but much more pretty
+        xmlfile = join(out_gui, "BOLTS.pyp")
+        pyp.write(xmlfile)
+        dom = xml.dom.minidom.parse(xmlfile)
+        prettyxml = dom.toprettyxml(indent="    ", encoding="utf-8")
+        # print(prettyxml)
+        f = open(xmlfile, "w")
+        f.write(prettyxml)
+        f.close
+
+
+        # py modul for GUI to retrieve the BOLTS data
+        with open(join(out_module, pyguiname), "w") as pyguifile:
+            pyguifile.write(pyguitemplate_pre)
+            pyguifile.write("    bolts_coll_id = build_ele.CollectionID.value\n")
+            # pyguifile.write("    print(bolts_coll_id)\n")
+            pyguifile.write("\n")
+            for coll, in self.repo.itercollections():
+                if not exists(join(self.repo.path, "allplan", coll.id, "%s.base" % coll.id)):
+                    # print("Skip %s due to missing base file" % coll.id)
+                    continue
+                for base, classes in self.dbs["allplan"].iterbases(["base", "classes"], filter_collection=coll):
+                    base_name = splitext(base.filename)[0]
+                    for cl in classes:
+                        if_coll_line = "    if bolts_coll_id == '" + coll.id + "':"
+                        cl_id_line = "        bolts_cl_id = build_ele.ClassID_" + coll.id + ".value"
+                        if_cl_line = "        if bolts_cl_id == '" + cl.id + "':"
+                        pyguifile.write(if_coll_line + "\n")
+                        pyguifile.write(cl_id_line + "\n")
+                        # pyguifile.write("        print(bolts_cl_id)\n")
+                        pyguifile.write(if_cl_line + "\n")
+                        for pname in cl.parameters.free:
+                            pname_line = "            params['" + pname + "'] = build_ele.PName_" + pname + "_" + cl.id + ".value"
+                            pyguifile.write(pname_line + "\n")
+                        pyguifile.write("            cl = repo.classes['" + cl.id + "']\n")
+                        pyguifile.write("            params = cl.parameters.collect(params)\n")
+                        pyguifile.write("            print(params)\n")
+                        pyguifile.write("            import " +  base_name + "\n")
+                        pyguifile.write("            bolt_part = " + base_name + "." + base_name + "(params)\n")
+                        pyguifile.write("\n")
+            pyguifile.write("\n")
+            pyguifile.write("    # common properties\n")
+            pyguifile.write("    com_prop = Ele.CommonProperties()\n")
+            pyguifile.write("    com_prop.GetGlobalProperties()\n")
+            pyguifile.write("\n")
+            pyguifile.write("    model_ele_list = [Ele.ModelElement3D(com_prop, bolt_part.Shape)]\n")
+            pyguifile.write("    return (model_ele_list, [])\n")
