@@ -32,6 +32,8 @@ classes:
       standard: DIN 1027
       labeling: DIN1027 %(type)s, l=%(l)s
       description: Z profile, metric european standard
+    source: http://www.bauforumstahl.de/Querschnittswerte
+    notes: http://en.wikipedia.org/wiki/Structural_steel
     parameters:
         free: [type,l]
         defaults: {type: "ZNP60", l: 1000}
@@ -60,6 +62,4 @@ classes:
                 ZNP120:  [  120,  60,    7,   9 ]
                 ZNP140:  [  140,  65,    8,  10 ]
                 ZNP160:  [  160,  70,  8.5,  11 ]
-    source: http://www.bauforumstahl.de/Querschnittswerte
-    notes: http://en.wikipedia.org/wiki/Structural_steel
 ...
