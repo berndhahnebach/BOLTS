@@ -1,0 +1,17 @@
+---
+- filename: GeomProfileHollowCircle.py
+  author: Bernd Hahnebach <bernd@bimstatik.org>
+  license: LGPL 2.1+ <http://www.gnu.org/licenses/lgpl-2.1>
+  type: module
+  classids: [hollow_circle]
+- filename: GeomProfileHollowSquare.py
+  author: Bernd Hahnebach <bernd@bimstatik.org>
+  license: LGPL 2.1+ <http://www.gnu.org/licenses/lgpl-2.1>
+  type: module
+  classids: [hollow_square]
+- filename: GeomProfileHollowRectangle.py
+  author: Bernd Hahnebach <bernd@bimstatik.org>
+  license: LGPL 2.1+ <http://www.gnu.org/licenses/lgpl-2.1>
+  type: module
+  classids: [hollow_rectangular]
+...
