@@ -1,0 +1,7 @@
+---
+- filename: GeomProfileI.py
+  author: Bernd Hahnebach <bernd@bimstatik.org>
+  license: LGPL 2.1+ <http://www.gnu.org/licenses/lgpl-2.1>
+  type: modul
+  classids: [ibeam_hea, ibeam_heaa, ibeam_heb, ibeam_hem, ibeam_ipe, ibeam_ipe750, ibeam_ipea, ibeam_ipeo, ibeam_iper, ibeam_ipev]
+...
