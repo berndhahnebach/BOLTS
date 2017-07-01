@@ -1,0 +1,7 @@
+---
+- filename: GeomNut.py
+  author: Bernd Hahnebach <bernd@bimstatik.org>
+  license: LGPL 2.1+ <http://www.gnu.org/licenses/lgpl-2.1>
+  type: module
+  classids: [hexagonthinnut1, hexagonthinnut2, hexagonnut1, hexagonnut2, hexagonnut3]
+...
