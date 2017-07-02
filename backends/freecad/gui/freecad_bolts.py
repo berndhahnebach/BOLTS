@@ -62,9 +62,20 @@ from BOLTS.bolttools.blt import Collection, Repository, ClassName, ClassStandard
 import importlib
 
 def add_part(collection, base,params,doc):
+	# print collection  # class instance of class BOLTS.bolttools.blt.Collection 
+	# print base  # class instance of class BOLTS.bolttools.freecad.BaseFunction
+	# print collection.id
+	# print collection.name
+	# print base.classids
+	# print base.module_name
+	# print base.parameters
+	print params
+	# um direkt add_part aufzurufen muesste ich instancen von collection und base 
+	# mit den noetigen attributen anlegen
 	if isinstance(base,freecad.BaseFunction):
 		module = importlib.import_module("BOLTS.freecad.%s.%s" %
 			(collection.id,base.module_name))
+		print module
 		module.__dict__[base.name](params,doc)
 	else:
 		raise  RuntimeError("Unknown base geometry type: %s" % type(base))
@@ -165,6 +176,8 @@ class TableIndexWidget(QTableIndexWidget):
 
 class BoltsWidget(QBoltsWidget):
 	def __init__(self,repo,freecad):
+		# print freecad
+		# print vars(freecad)
 		QBoltsWidget.__init__(self)
 		self.ui = Ui_BoltsWidget()
 		self.ui.setupUi(self)
@@ -316,14 +329,28 @@ class BoltsWidget(QBoltsWidget):
 			FreeCAD.newDocument()
 
 		items = self.ui.partsTree.selectedItems()
+		# print items  # PySide.QtGui.QTreeWidgetItem object
 
 		if len(items) < 1:
 			return
 
 		data = unpack(items[0].data(0,32))
 
+		# print data  # BOLTS.bolttools.blt.ClassName instance
+		# print vars(data)
+		# print data.name
+		# print vars(data.name)
+		# print data.name.safe
+		# print data.group
+		# print vars(data.group)
+ 
 		if isinstance(data,ClassName):
+			# kleines C und kleines L, nicht kleines C und eins !
+			# hier passierts die BOLTSklasse wird  instanziert !
 			cl = self.repo.class_names.get_src(data)
+			# print cl  # BOLTS.bolttools.blt.Class instance
+			# print vars(cl)
+			print cl.id  # classID is known! glaube classID ist in BOLTS global eindeutig!
 		elif isinstance(data,ClassStandard):
 			cl = self.repo.class_standards.get_src(data)
 		else:
@@ -333,6 +360,8 @@ class BoltsWidget(QBoltsWidget):
 		#read parameters from widgets
 		for key in self.param_widgets:
 			params[key] = self.param_widgets[key].getValue()
+		print params  # key is known!
+		# mit der class instance der BOLTSklasse werden die parameter geholt
 		params = cl.parameters.collect(params)
 
 		params['name'] = data.labeling.get_nice(params)
@@ -356,6 +385,9 @@ class BoltsWidget(QBoltsWidget):
 			base = self.dbs["freecad"].base_classes.get_src(cl)
 			coll = self.repo.collection_classes.get_src(cl)
 			add_part(coll,base,params,FreeCAD.ActiveDocument)
+			# print coll
+			# print base
+			# print params
 			FreeCADGui.SendMsgToActiveView("ViewFit")
 			FreeCAD.ActiveDocument.recompute()
 		except ValueError as e:

@@ -31,6 +31,13 @@ class FreeCADGeometry(BaseElement):
 
 class BaseFunction(FreeCADGeometry):
 	def __init__(self,function,basefile,collname,backend_root):
+		'''
+		print '__init__ BaseFunction'
+		print function
+		print basefile
+		print collname
+		print backend_root
+		'''
 		check_schema(function,"basefunction",
 			["name","classids"],
 			["parameters"]

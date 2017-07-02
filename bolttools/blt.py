@@ -146,6 +146,7 @@ class Collection:
 	Container for all classes contained in a BOLTS Collection
 	"""
 	def __init__(self,coll):
+		# print '__init__ Collection'
 		check_schema(coll,"collection",
 			["id","author","license","blt-version","classes"],
 			["name","description"]
@@ -209,6 +210,7 @@ class MultiName(Designation):
 
 class Repository:
 	def __init__(self,path):
+		# print '__init__ Repository'
 		#check for conformity
 		if not exists(path):
 			e = MalformedRepositoryError("Repo directory does not exist")
