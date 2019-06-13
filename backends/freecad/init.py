@@ -324,6 +324,16 @@ def _add_part(cl, in_params):
     # add part
     base = freecad_db.base_classes.get_src(cl)
     coll = repo.collection_classes.get_src(cl)
+
+    # in params add path to key face_file
+    if 'face_file' in params:
+        params['face_file'] = join(
+            repo.path,
+            'data',
+            coll.id,
+            "{}_{}.{}".format(cl.id, params['type'], params['face_file'])
+        )
+
     boltsgui.add_part(
         coll,
         base,
