@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from os import makedirs
-from os.path import join, exists, basename
+from os.path import join, exists, basename, isdir
 from shutil import copy, copytree, copyfile, rmtree
 # pylint: disable=W0622
 from codecs import open
@@ -78,8 +78,15 @@ class FreeCADBackend(Backend):
 		for coll, in self.repo.itercollections():
 			if not license.is_combinable_with(coll.license_name,args["target_license"]):
 				continue
-			copy(join(self.repo.path,"data","%s.blt" % coll.id),
-				join(bolts_path,"data","%s.blt" % coll.id))
+			copy(
+				join(self.repo.path,"data","%s.blt" % coll.id),
+				join(bolts_path,"data","%s.blt" % coll.id)
+			)
+			if isdir(join(self.repo.path, "data", coll.id)):
+				copytree(
+					join(self.repo.path, "data", coll.id),
+					join(bolts_path, "data", coll.id)
+				)
 
 			if not exists(join(bolts_path,"freecad",coll.id)):
 				makedirs(join(bolts_path,"freecad",coll.id))
