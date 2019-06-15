@@ -44,6 +44,8 @@ classes:
         data:
           #type       : [face_file]
           40x40       : ["brep"]
+          40x40E      : ["brep"]
+          40x40light  : ["brep"]
     source: measured myself
   - id: tslot20x20
     names:
